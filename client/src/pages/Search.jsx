@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Listingitem from '../components/Listingitem'
 
 export default function Search() {
     const navigate = useNavigate()
@@ -15,7 +16,7 @@ export default function Search() {
 
     const [loading, setLoading] = useState(false)
     const [listings, setListings] =useState([])
-    console.log(listings)
+
 
     useEffect(() => {
 
@@ -61,7 +62,7 @@ export default function Search() {
 
     },[location.search])
     const handleChange= (e) => {
-        if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale'){
+        if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sell'){
             setSidebardata({...sidebardata, type: e.target.id})
         }
         if(e.target.id === 'searchTerm'){
@@ -116,7 +117,7 @@ export default function Search() {
                         onChange={handleChange}
                         checked={sidebardata.type === 'all'}
                         />
-                        <span>Rent & Sale</span>
+                        <span>Rent & sell</span>
                     </div>
                     <div className="flex gap-2">
                         <input type="checkbox" id="rent" className='w-5'
@@ -125,10 +126,10 @@ export default function Search() {
                         <span>Rent</span>
                     </div>
                     <div className="flex gap-2">
-                        <input type="checkbox" id="sale" className='w-5'
+                        <input type="checkbox" id="sell" className='w-5'
                         onChange={handleChange}
-                        checked={sidebardata.type === 'sale'}/>
-                        <span>Sale</span>
+                        checked={sidebardata.type === 'sell'}/>
+                        <span>sell</span>
                     </div>
                     <div className="flex gap-2">
                         <input type="checkbox" id="offer" className='w-5'
@@ -169,10 +170,21 @@ export default function Search() {
                 uppercase hover:opacity-95'>Search</button>
             </form>
         </div>
-        <div className="">
+        <div className="flex-1">
             <h1 className='text-3xl font-semibold border-b p-3 text-red-700 mt-5'>
                 Listing results:
             </h1>
+            <div className="p-7 flex flex-wrap gap-4">
+                {!loading && listings.length === 0 && (
+                    <p className='text-xl text-slate-800'>No listing found!</p>
+                )}
+                {loading && (
+                    <p className='text-xl text-slate-700 text-center w-full'>Loading...</p>
+                )}
+                {
+                    !loading && listings && listings.map((listing) => <Listingitem key={listing._id} listing={listing}/>)
+                }
+            </div>
         </div>
     </div>
   )
